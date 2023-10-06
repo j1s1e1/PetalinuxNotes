@@ -1,0 +1,30 @@
+This is the old way to do this
+
+"-redir tcp:11234::1234 -net nic -net nic -net nic -net nic -net user"
+	Errors
+
+"-net nic,model=virtio -net tap,ifname=tap0,script=no,downscript=no"
+	This runs, but doesnn't work
+
+A new example
+-netdev user,id=ethernet.0,hostfwd=tcp::5555-:1522,hostfwd=tcp::9999-:9,hostfwd=tcp::17010-:17010,hostfwd=tcp::17013-:17013
+-device rtl8139,netdev=ethernet.0
+
+-netdev user,id=ethernet.0,hostfwd=tcp::11235-:1234
+	This gives eth0 with an IP address
+	
+Another new example
+-netdev user,id=n1 -device e1000,netdev=n1 -netdev tap,id=n2 -device virtio-net,netdev=n2
+	/dev/net/tun: Operation not permitted
+	
+-nic tap,ifname=tap0,script=no,downscript=no -netdev user,id=n1 -device e1000,netdev=n1 -netdev tap,id=n2 -device virtio-net,netdev=n2
+	/dev/net/tun: Operation not permitted
+
+-netdev user,id=n1 -device e1000,netdev=n1 -netdev tap0,id=n2 -device virtio-net,netdev=n2
+	Invalid parameter 'tap0'
+	
+-netdev user,id=n1 -device e1000,netdev=n1 -netdev tap,ifname=tap0,script=no,downscript=no,id=n2 -device virtio-net,netdev=n2
+	no error now still no tap
+
+-netdev user,id=n1 -device e1000,netdev=n1 -netdev tap,ifname=tap0,script=no,downscript=no,id=n2 -device e1000,netdev=n2,mac=ce:ee:7a:a6:61:58
+	no error now still no tap
