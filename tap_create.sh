@@ -1,3 +1,5 @@
+# Script has to be run as root
+# First parameter is user name
 # Create a bridge named br0
 brctl addbr br0
 # Add eth0 interface to bridge
